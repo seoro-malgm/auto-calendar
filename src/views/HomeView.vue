@@ -2,7 +2,7 @@
   <div class="my-5">
     <b-container>
       <header class="mb-3">
-        <h1>자동 달력만들기</h1>
+        <h1>전아모 자동 달력만들기</h1>
       </header>
       <b-row>
         <b-col cols="6">
@@ -52,7 +52,24 @@
         </li>
       </ul>
       <div class="mt-3 mb-5">
-        <b-btn variant="primary w-100 py-3" @click="sumbit" :disabled="validate"> 생성 </b-btn>
+        <b-row>
+          <b-col cols="11">
+            <b-btn variant="primary w-100 py-3" @click="sumbit" :disabled="validate"> 생성 </b-btn>
+          </b-col>
+          <b-col cols="1">
+            <b-btn
+              variant="secondary w-100 py-3"
+              @click="
+                () => {
+                  result = null;
+                  showResult = false;
+                }
+              "
+            >
+              리셋
+            </b-btn>
+          </b-col>
+        </b-row>
       </div>
     </b-container>
     <b-container fluid class="mt-5 p-5" v-if="!validate && showResult">
@@ -61,7 +78,7 @@
           <h1>달력 결과:</h1>
           <div class="d-flex ml-auto mr-0 align-items-center">
             <b-btn @click="collapsed = !collapsed" class="mr-2">{{ collapsed ? "열기" : "닫기" }}</b-btn>
-            <b-btn @click="copyCalendar">달력 복사</b-btn>
+            <b-btn @click="copyCalendar">HTML 코드 복사</b-btn>
           </div>
         </header>
       </b-container>
@@ -74,22 +91,22 @@
             <div class="date" style="margin: 0 auto 0 0; color: #563f93; font-size: 2rem">{{ mounths[mounth] }} {{ year }}</div>
             <div class="color-info" style="background: #f2f2f2; padding: 0.75rem 0.75rem">
               <i
-                class="dot dot-1"
+                class="dot"
                 style="width: 8px; height: 8px; margin: 0 0.25rem 0 0.75rem; display: inline-block; border-radius: 50%; background-color: #f54336"
               ></i>
               <span class="txt">대기업</span>
               <i
-                class="dot dot-2"
+                class="dot"
                 style="width: 8px; height: 8px; margin: 0 0.25rem 0 0.75rem; display: inline-block; border-radius: 50%; background-color: #8ac44a"
               ></i>
               <span class="txt">중,소기업</span>
               <i
-                class="dot dot-3"
+                class="dot"
                 style="width: 8px; height: 8px; margin: 0 0.25rem 0 0.75rem; display: inline-block; border-radius: 50%; background-color: #ffc108"
               ></i>
               <span class="txt">외국계</span>
               <i
-                class="dot dot-4"
+                class="dot"
                 style="width: 8px; height: 8px; margin: 0 0.25rem 0 0.75rem; display: inline-block; border-radius: 50%; background-color: #2296f3"
               ></i>
               <span class="txt" style="margin: 0 0.25rem 0 0"> 스타트업</span>
@@ -100,26 +117,19 @@
             <div class="calendar-table" style="width: 100%; border-collapse: collapse">
               <div class="day" style="width: 100%; color: #666">
                 <div
-                  style="
-                    width: 14.285%;
-                    padding-left: 2%;
-                    font-size: 0.875rem;
-                    padding-bottom: 0.5rem;
-                    display: inline-block;
-                    border-collapse: collapse;
-                  "
+                  style="width: 14%; font-size: 0.875rem; text-align: center; display: inline-block; border-collapse: collapse"
                   v-for="(day, key) in days"
                   :key="key"
                 >
                   {{ day }}
                 </div>
               </div>
-              <div class="contents" style="margin-top: 1rem; width: 100%">
+              <div class="contents" style="margin-top: 0.5rem; width: 100%">
                 <div
                   style="
-                    width: 14.285%;
+                    width: 14%;
                     height: 100%;
-                    min-width: 14.285%;
+                    min-width: 14%;
                     min-height: 13rem;
                     padding: 0.75rem;
                     border: 1px solid #f2f2f2;
@@ -161,14 +171,20 @@
         </div>
       </section>
     </b-container>
+    <!-- modals -->
+    <modal-copy :code="code" />
   </div>
 </template>
 
 <script>
 import input from "@/plugins/input";
 import date from "@/plugins/date";
+import modalCopy from "../components/modalCopy";
 export default {
   name: "HomeView",
+  components: {
+    modalCopy,
+  },
   data() {
     return {
       types: {
@@ -191,6 +207,8 @@ export default {
 
       result: null,
       showResult: false,
+
+      code: null,
     };
   },
 
@@ -221,20 +239,33 @@ export default {
     this.getDates();
   },
   methods: {
-    mapping({ dates, compaines, links, variant }) {
+    reset() {
+      this.result = null;
+      this.getDates();
+    },
+    mapping({ name, dates, compaines, links, variant }) {
       const stringToArray = (list) => list.split("\n");
-      const result = stringToArray(dates).map((date, index) => {
-        let rObj;
-        rObj = {
-          variant,
-          date: +date.split("-")[1].replace(/\s/g, ""),
-          company: stringToArray(compaines)[index].replace(/\s/g, ""),
-          link: stringToArray(links)[index].replace(/\s/g, ""),
-        };
-        return rObj;
-      });
+      if (
+        stringToArray(dates).length !== stringToArray(compaines).length ||
+        stringToArray(dates).length !== stringToArray(links).length ||
+        stringToArray(compaines).length !== stringToArray(links).length
+      ) {
+        alert(`${name}의 날짜/회사명/링크의 수가 맞지 않습니다. 다시 시도해주세요.`);
+        return;
+      } else {
+        const result = stringToArray(dates).map((date, index) => {
+          let rObj;
+          rObj = {
+            variant,
+            date: +date.split("-")[1].replace(/\s/g, ""),
+            company: stringToArray(compaines)[index].replace(/\s/g, ""),
+            link: stringToArray(links)[index].replace(/\s/g, ""),
+          };
+          return rObj;
+        });
 
-      return result;
+        return result;
+      }
     },
     getDates() {
       const date = new Date();
@@ -264,13 +295,6 @@ export default {
         }
       }
 
-      // for (let i = 1; i < 7 - TLDay; i++) {
-      //   nextDates.push({
-      //     date: i,
-      //     disabled: true,
-      //   });
-      // }
-
       this.dates = [
         ...prevDates,
         ...thisDates.map((date) => {
@@ -279,6 +303,8 @@ export default {
       ];
     },
     sumbit() {
+      this.reset();
+
       const merged = [...this.mapping(this.input.a), ...this.mapping(this.input.b), ...this.mapping(this.input.c), ...this.mapping(this.input.d)];
       const dates = this.dates;
 
@@ -291,10 +317,14 @@ export default {
         });
       });
       this.result = dates;
+      console.log(this.result);
+
       this.showResult = true;
     },
     copyCalendar() {
       const calendar = this.$refs.calendar;
+      this.code = calendar;
+      this.$bvModal.show("modal-copy");
 
       console.log(calendar);
     },
@@ -310,7 +340,7 @@ export default {
     display: none;
   }
   &.collapsed {
-    max-height: 300px;
+    max-height: 200px;
     height: 300px;
     overflow-y: hidden;
     &::after {

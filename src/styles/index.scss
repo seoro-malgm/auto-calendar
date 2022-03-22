@@ -42,3 +42,53 @@ select.custom-select {
     color: #222 !important;
   }
 }
+
+.modal-dialog {
+  .modal-header {
+    border-radius: 10px 10px 0 0;
+    background-color: white;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    .modal-title {
+      text-align: left;
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+    }
+    button {
+      margin: 0;
+      margin-top: -0.5rem;
+      padding: 2px;
+      opacity: 1;
+    }
+  }
+  .modal-body {
+    padding: 0.5rem 1rem 2rem;
+    border: 0;
+  }
+  .modal-content {
+    border: 0;
+    border-radius: 10px;
+  }
+  .modal-footer {
+    padding: 0;
+    border: 0;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: unset;
+    overflow: hidden;
+    .btn {
+      width: 100%;
+      margin: 0;
+      padding: 0.75rem 0.25rem;
+      border-radius: 0;
+      font-size: 13px !important;
+      font-weight: 600;
+    }
+  }
+}
