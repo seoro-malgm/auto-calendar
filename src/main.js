@@ -9,7 +9,7 @@ import store from "./store";
 import "./styles/index.scss";
 
 const urls = {
-  sheet: `https://docs.google.com/spreadsheets/d/1gQZupnOU3mKQLSQ7kiml7RwW4MOdloKhBPtg0vNInx0/edit?usp=sharing`,
+  sheet: `https://docs.google.com/spreadsheets/d/1aXGKodqpfncq7UI0203Lo4Lj0f1C4Xmjd-oRy4S1em8/edit#gid=0`,
 };
 Vue.prototype.$urls = urls;
 
