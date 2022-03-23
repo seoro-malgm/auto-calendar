@@ -92,3 +92,34 @@ select.custom-select {
     }
   }
 }
+
+$primary: #333399;
+$secondary: #fad017;
+$transparant: rgba(
+  $color: #ffffff,
+  $alpha: 0,
+);
+$red: #f54336;
+$green: #8ac44a;
+$yellow: #ffc108;
+$blue: #2296f3;
+
+$theme-colors: (
+  // 페이지 공통
+  "primary": $primary,
+  "secondary": $secondary,
+  "transparant": $transparant,
+  "red": $red,
+  "green": $green,
+  "yellow": $yellow,
+  "blue": $blue,
+  "black": #000,
+  "white": #fff
+) !default;
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/bootstrap-vue/src/index.scss";
+
+p {
+  text-overflow: ellipsis;
+}
