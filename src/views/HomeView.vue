@@ -15,6 +15,16 @@
             </b-col>
             <b-col cols="3">
               <b-input-group>
+                <b-form-select v-model="year" class="mr-2" size="lg">
+                  <b-form-select-option v-for="y in years" :key="y" :value="y">
+                    {{ y }}
+                  </b-form-select-option>
+                </b-form-select>
+                <b-form-text>년</b-form-text>
+              </b-input-group>
+            </b-col>
+            <b-col cols="3">
+              <b-input-group>
                 <b-form-select v-model="mounth" class="mr-2" size="lg">
                   <b-form-select-option v-for="(m, i) in mounths" :key="i" :value="i">
                     {{ i + 1 }}
@@ -24,9 +34,9 @@
               </b-input-group>
             </b-col>
             <b-col cols="2">
-              <b-btn variant="primary w-100 h-100 d-flex align-items-center justify-content-center" :href="$urls.sheet" target="_blank"
-                >양식 시트 확인</b-btn
-              >
+              <b-btn variant="primary w-100 h-100 d-flex align-items-center justify-content-center" :href="$urls.sheet" target="_blank">
+                양식 시트 확인
+              </b-btn>
             </b-col>
             <b-col cols="2">
               <router-link class="btn btn-secondary w-100 h-100 d-flex align-items-center justify-content-center" to="/howtouse">사용법</router-link>
@@ -141,7 +151,7 @@
                     width: 14.25%;
                     height: 100%;
                     min-width: 14.25%;
-                    min-height: 11rem;
+                    min-height: 12.5rem;
                     padding: 0.5rem 0.75rem;
                     border: 1px solid #f2f2f2;
                     font-size: 0.7rem;
@@ -224,6 +234,7 @@ export default {
       },
 
       type: "dev",
+      // years: [2022, 2023, 2024, 2025, 2026],
       year: 2022,
       mounth: new Date().getMonth() + 1,
 
@@ -244,6 +255,14 @@ export default {
   },
 
   computed: {
+    years() {
+      const thisYear = new Date().getFullYear();
+      const result = [];
+      for (let i = 0; i < 5; i++) {
+        result.push(thisYear + i);
+      }
+      return result;
+    },
     validate() {
       return (
         !this.input.a.dates ||
@@ -300,6 +319,7 @@ export default {
     },
     getDates() {
       const date = new Date();
+      date.setFullYear(this.year);
       date.setMonth(this.mounth);
       const viewYear = date.getFullYear();
       const viewMonth = date.getMonth();
