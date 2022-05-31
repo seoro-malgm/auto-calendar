@@ -236,7 +236,7 @@ export default {
       type: "dev",
       // years: [2022, 2023, 2024, 2025, 2026],
       year: 2022,
-      mounth: new Date().getMonth() + 1,
+      mounth: new Date().getMonth(),
 
       mounths: date.mounths,
       days: date.days,
@@ -319,10 +319,10 @@ export default {
     },
     getDates() {
       const date = new Date();
-      date.setFullYear(this.year);
-      date.setMonth(this.mounth);
-      const viewYear = date.getFullYear();
-      const viewMonth = date.getMonth();
+      // date.setFullYear(this.year);
+      // date.setMonth(this.mounth);
+      const viewYear = this.year;
+      const viewMonth = this.mounth;
 
       const prevLast = new Date(viewYear, viewMonth, 0);
       const thisLast = new Date(viewYear, viewMonth + 1, 0);
